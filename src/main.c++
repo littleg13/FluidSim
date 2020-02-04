@@ -12,21 +12,8 @@
 #include "SceneElements/Snowman.h"
 #include "PhongMaterial.h"
 
-void createScene(ExtendedController& c, ShaderIF* sIF, ShaderIF* particlesIF, ShaderIF* computesIF, ShaderIF* groundsIF)
+void createScene(ExtendedController& c, ShaderIF* particlesIF, ShaderIF* computesIF)
 {
-	c.addModel(new Ground(groundsIF));
-	cryph::AffVector center = cryph::AffVector(0, 0, 0);
-	float scale = 0.30;
-	c.addModel(new Bench(sIF, center+cryph::AffVector(-2.5, 0, -1), 0, scale));
-	c.addModel(new Bench(sIF, center+cryph::AffVector(4.2, 0, 1.932), 270, scale));
-	float bigPath[3] = {10.0, 2, 1.5};
-	float smallPath[3] = {3.8, 2, 1.5};
-	c.addModel(new Path(sIF, center+cryph::AffVector(-5, 0, 0), bigPath, 0, 0.5));
-	c.addModel(new Path(sIF, center+cryph::AffVector(3, 0, 1.432), smallPath, 270, 0.5));
-	c.addModel(new LampPost(sIF, center+cryph::AffVector(4, -0.1, -1.0), 0.75));
-	c.addModel(new LampPost(sIF, center+cryph::AffVector(-4.5, 0, 1.932), 0.75));
-	c.addModel(new SwingSet(sIF, center+cryph::AffVector(-1, 0, -4.5), 0.75));
-	c.addModel(new Snowman(sIF, center+cryph::AffVector(-3.5, 0, -2.5), 0.75));
 	c.addModel(new ParticleSystem(particlesIF, computesIF, 10000));
 }
 
@@ -85,30 +72,15 @@ int main(int argc, char* argv[])
 	c.reportVersions(std::cout);
 
 
-	ShaderIF* particlesIF = new ShaderIF("shaders/basicParticle.vsh", "shaders/phong.fsh");
-	ShaderIF::ShaderSpec vertex  = {"shaders/basic.vsh", GL_VERTEX_SHADER}; 
-	ShaderIF::ShaderSpec particleVertex  = {"shaders/basicParticle.vsh", GL_VERTEX_SHADER}; 
-	ShaderIF::ShaderSpec groundVertex  = {"shaders/basicGround.vsh", GL_VERTEX_SHADER}; 
-	ShaderIF::ShaderSpec fragment  = {"shaders/phong.fsh", GL_FRAGMENT_SHADER};		
+	ShaderIF* particlesIF = new ShaderIF("shaders/basicParticle.vsh", "shaders/phong.fsh");	
 	ShaderIF::ShaderSpec compute = {"shaders/compute.comp", GL_COMPUTE_SHADER};
-	ShaderIF::ShaderSpec tessCtlShader  = {"shaders/tessCont.tsh", GL_TESS_CONTROL_SHADER};
-	ShaderIF::ShaderSpec tessEvalShader = {"shaders/tess.tsh", GL_TESS_EVALUATION_SHADER};
-	ShaderIF::ShaderSpec snowGeo = {"shaders/snowGeo.gsh", GL_GEOMETRY_SHADER};
+	
 	ShaderIF::ShaderSpec* computeShaders = new ShaderIF::ShaderSpec[1];
 	computeShaders[0] = compute;
 	
-	ShaderIF::ShaderSpec* groundShaders = new ShaderIF::ShaderSpec[4];
-	groundShaders[0] = groundVertex;
-	groundShaders[1] = fragment;
-	groundShaders[2] = tessCtlShader;
-	groundShaders[3] = tessEvalShader;
-
-
-	ShaderIF* sIF = new ShaderIF("shaders/basic.vsh", "shaders/phong.fsh");;
 	ShaderIF* computesIF = new ShaderIF(computeShaders, 1);
-	ShaderIF* groundsIF = new ShaderIF(groundShaders, 4);
 
-	createScene(c, sIF, particlesIF, computesIF, groundsIF);
+	createScene(c, particlesIF, computesIF);
 
 
 	double xyz[6];
@@ -122,7 +94,6 @@ int main(int argc, char* argv[])
 	c.run();
 
 	c.removeAllModels(true);
-	delete sIF;
 
 	return 0;
 }

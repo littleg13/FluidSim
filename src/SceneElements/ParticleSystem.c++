@@ -24,7 +24,7 @@ void ParticleSystem::getMCBoundingBox(double* xyzLimits) const
 {
 	xyzLimits[0] = -5; // xmin  Give real values!
 	xyzLimits[1] = 5; // xmax         |
-	xyzLimits[2] = 0; // ymin         |
+	xyzLimits[2] = -5; // ymin         |
 	xyzLimits[3] = 5; // ymax         |
 	xyzLimits[4] = -5; // zmin         |
 	xyzLimits[5] = 5; // zmax        \_/
@@ -32,37 +32,23 @@ void ParticleSystem::getMCBoundingBox(double* xyzLimits) const
 
 bool ParticleSystem::handleCommand(unsigned char anASCIIChar, double ldsX, double ldsY)
 {
-	switch (tolower(anASCIIChar))
-	{
-	case 'w':
-        total_time = 62.8;
-		break;
-    case 's':
-        total_time = 0;
-		break;
-    case ' ':
-        paused = !paused;
-		break;	
-	default:
-		break;
-	}
 	return true;
 }
 
 void ParticleSystem::initParticles(){
 	particles = new Particle[n_particles];
 	for(int i=0;i<n_particles;i++){
-		particles[i].position[0] = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 12 - 6;
-		particles[i].position[1] = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) + 9;
-		particles[i].position[2] = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 12 - 6;
+		particles[i].position[0] = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 10 - 5;
+		particles[i].position[1] = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 10 - 5;
+		particles[i].position[2] = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 10 - 5;
 
         particles[i].origin[0] = particles[i].position[0];
         particles[i].origin[1] = particles[i].position[1];
         particles[i].origin[2] = particles[i].position[2];
 
-		particles[i].velocity[0] = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 0.2 - 0.1;
-		particles[i].velocity[1] = -((static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 0.5 + 0.5);
-		particles[i].velocity[2] = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 0.2 - 0.1;
+		particles[i].velocity[0] = 0; //(static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 0.2 - 0.1;
+		particles[i].velocity[1] = 0; //-((static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 0.5 + 0.5);
+		particles[i].velocity[2] = 0; //(static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) * 0.2 - 0.1;
 	}
 
 	glGenVertexArrays(1, vao);
@@ -108,9 +94,7 @@ void ParticleSystem::particlePass(){
     float delta_time = glfwGetTime() - last_time;
     if(!paused)
         total_time += delta_time;
-    float season = (-cos(.05 * total_time) * 0.666 + 0.65) * n_particles;
 	glUniform1f(particleShaderIF->ppuLoc("deltaTime"), glfwGetTime() - last_time);
-    glUniform1f(particleShaderIF->ppuLoc("season"), season);
 	last_time = glfwGetTime();
 
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 5, vbo[0]);
