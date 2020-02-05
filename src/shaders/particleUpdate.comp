@@ -4,8 +4,12 @@ struct Particle{
     vec4 position;
     vec4 velocity;
     vec4 origin;
+    uint nextParticle;
+    uint current_frame
 };
 uniform float deltaTime;
+uniform int hash_size;
+uniform int current_frame;
 layout(std430, binding = 5) buffer particle_data{
     Particle particles[ ]; 
 };

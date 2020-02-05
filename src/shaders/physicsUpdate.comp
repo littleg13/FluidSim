@@ -1,0 +1,36 @@
+#version 430
+
+struct Particle{
+    vec4 position;
+    vec4 velocity;
+    vec4 origin;
+    uint nextParticle;
+    uint current_frame;
+};
+uniform float deltaTime;
+uniform int hash_size;
+uniform int current_frame;
+layout(std430, binding = 5) buffer particle_data{
+    Particle particles[ ]; 
+};
+layout(std430, binding = 6) buffer old_pos{
+    vec3 old_pos[ ]; 
+};
+layout(std430, binding = 7) buffer hash_table{
+    uint hash_table[ ]; 
+};
+
+uint hash(vec3 pos){
+    (uint32_t(floor(particles[i].position[0] / d) * p1) ^ uint32_t(floor(particles[i].position[1] / d) * p2) ^ uint32_t(floor(particles[i].position[2] / d) * p3)) % hash_size;
+}
+
+bool isParticleHere(vec3 pos, Particle par){
+    return (floor(pos.xyz) == floor(par.position.xyz));
+}
+
+layout(local_size_x = 256, local_size_y = 1, local_size_z = 1) in;
+void main(){
+    uint globalID = gl_GlobalInvocationID.x;
+    
+    // particles[globalID].position.xyz += particles[globalID].velocity.xyz * deltaTime;
+}

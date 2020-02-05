@@ -15,7 +15,7 @@ MAKE = make
 LINK = g++ -fPIC -g
 LOCAL_UTIL_LIBRARIES = ../lib/libcryph.so ../lib/libfont.so ../lib/libglsl.so ../lib/libImageReader.so ../lib/libmvc.so
 
-OBJS = main.o ExtendedController.o PhongMaterial.o SceneElement.o Prism.o Cylinder.o Ground.o SwingSet.o LampPost.o BenchArm.o BenchChair.o Bench.o Path.o Snowman.o ParticleSystem.o
+OBJS = main.o ExtendedController.o PhongMaterial.o SceneElement.o ParticleSystem.o
 
 main: $(OBJS) $(LOCAL_UTIL_LIBRARIES)
 	$(LINK) -o main $(OBJS) $(LOCAL_UTIL_LIBRARIES) $(GL_LIBRARIES)
@@ -43,25 +43,5 @@ PhongMaterial.o: PhongMaterial.c++
 	$(CPP) $(C_FLAGS) PhongMaterial.c++
 SceneElement.o: SceneElement.h SceneElement.c++
 	$(CPP) $(C_FLAGS) SceneElement.c++
-Prism.o: SceneElements/Prism.h SceneElements/Prism.c++
-	$(CPP) $(C_FLAGS) SceneElements/Prism.c++
-Cylinder.o: SceneElements/Cylinder.h SceneElements/Cylinder.c++
-	$(CPP) $(C_FLAGS) SceneElements/Cylinder.c++
-Ground.o: SceneElements/Ground.h SceneElements/Ground.c++
-	$(CPP) $(C_FLAGS) SceneElements/Ground.c++
-SwingSet.o: SceneElements/SwingSet.h SceneElements/SwingSet.c++
-	$(CPP) $(C_FLAGS) SceneElements/SwingSet.c++
-LampPost.o: SceneElements/LampPost.h SceneElements/LampPost.c++
-	$(CPP) $(C_FLAGS) SceneElements/LampPost.c++
-BenchArm.o: SceneElements/BenchArm.h SceneElements/BenchArm.c++
-	$(CPP) $(C_FLAGS) SceneElements/BenchArm.c++
-BenchChair.o: SceneElements/BenchChair.h SceneElements/BenchChair.c++
-	$(CPP) $(C_FLAGS) SceneElements/BenchChair.c++
-Bench.o: SceneElements/Bench.h SceneElements/Bench.c++
-	$(CPP) $(C_FLAGS) SceneElements/Bench.c++
-Path.o: SceneElements/Path.h SceneElements/Path.c++
-	$(CPP) $(C_FLAGS) SceneElements/Path.c++
-Snowman.o: SceneElements/Snowman.h SceneElements/Snowman.c++
-	$(CPP) $(C_FLAGS) SceneElements/Snowman.c++
 ParticleSystem.o: SceneElements/ParticleSystem.h SceneElements/ParticleSystem.c++
 	$(CPP) $(C_FLAGS) SceneElements/ParticleSystem.c++

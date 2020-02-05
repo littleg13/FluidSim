@@ -2,19 +2,12 @@
 
 #include "ExtendedController.h"
 #include "Inline.h"
-#include "SceneElements/Prism.h"
-#include "SceneElements/Ground.h"
-#include "SceneElements/SwingSet.h"
-#include "SceneElements/LampPost.h"
-#include "SceneElements/Bench.h"
-#include "SceneElements/Path.h"
 #include "SceneElements/ParticleSystem.h"
-#include "SceneElements/Snowman.h"
 #include "PhongMaterial.h"
 
-void createScene(ExtendedController& c, ShaderIF* particlesIF, ShaderIF* computesIF)
+void createScene(ExtendedController& c, ShaderIF* particlesIF, ShaderIF* particleUpdatesIF, ShaderIF* physicsUpdatesIF)
 {
-	c.addModel(new ParticleSystem(particlesIF, computesIF, 10000));
+	c.addModel(new ParticleSystem(particlesIF, particleUpdatesIF, physicsUpdatesIF, 100));
 }
 
 void set3DViewingInformation(double overallBB[])
@@ -73,14 +66,19 @@ int main(int argc, char* argv[])
 
 
 	ShaderIF* particlesIF = new ShaderIF("shaders/basicParticle.vsh", "shaders/phong.fsh");	
-	ShaderIF::ShaderSpec compute = {"shaders/compute.comp", GL_COMPUTE_SHADER};
+	ShaderIF::ShaderSpec particleUpdate = {"shaders/particleUpdate.comp", GL_COMPUTE_SHADER};
+	ShaderIF::ShaderSpec physicsUpdate = {"shaders/physicsUpdate.comp", GL_COMPUTE_SHADER};
 	
-	ShaderIF::ShaderSpec* computeShaders = new ShaderIF::ShaderSpec[1];
-	computeShaders[0] = compute;
-	
-	ShaderIF* computesIF = new ShaderIF(computeShaders, 1);
+	ShaderIF::ShaderSpec* particleUpdateShaders = new ShaderIF::ShaderSpec[1];
+	particleUpdateShaders[0] = particleUpdate;
+	ShaderIF::ShaderSpec* physicsUpdateShaders = new ShaderIF::ShaderSpec[1];
+	physicsUpdateShaders[0] = physicsUpdate;
 
-	createScene(c, particlesIF, computesIF);
+	ShaderIF* particleUpdatesIF = new ShaderIF(particleUpdateShaders, 1);
+	
+	ShaderIF* physicsUpdatesIF = new ShaderIF(physicsUpdateShaders, 1);
+
+	createScene(c, particlesIF, particleUpdatesIF, physicsUpdatesIF);
 
 
 	double xyz[6];
